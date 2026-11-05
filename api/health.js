@@ -19,7 +19,7 @@ export default async function handler(req, res) {
     ok: database !== "error",
     service: "neo-ai-api",
     database,
-    inferenceConfigured: Boolean(process.env.INFERENCE_BASE_URL),
+    inferenceConfigured: Boolean(process.env.OPENROUTER_API_KEY),
     timestamp: new Date().toISOString()
   });
 }

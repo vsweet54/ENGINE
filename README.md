@@ -2,7 +2,7 @@
 
 Backend starter untuk mengumpulkan **metadata publik** model AI dari OpenRouter, Hugging Face, dan GitHub. Dirancang untuk Vercel Functions + Neon PostgreSQL.
 
-> Penting: katalog metadata bukan izin inference. Project ini tidak membypass autentikasi provider. Tanpa `INFERENCE_BASE_URL`, katalog tetap bisa digunakan, tetapi `/api/chat` mengembalikan HTTP 503.
+> Penting: katalog metadata bukan izin inference. Project ini tidak membypass autentikasi provider. Tanpa `OPENROUTER_API_KEY`, katalog tetap bisa digunakan, tetapi `/api/chat` mengembalikan HTTP 503.
 
 ## 1. Deploy database Neon
 
@@ -38,13 +38,13 @@ Gunakan secret acak yang panjang dan berbeda untuk `CRON_SECRET` dan `ADMIN_SECR
 - `GET /api/model?id=openrouter:provider/model` — detail model.
 - `POST /api/sync` — sinkronisasi manual, header `Authorization: Bearer ADMIN_SECRET`.
 - `GET /api/cron/sync` — endpoint cron, header `Authorization: Bearer CRON_SECRET`.
-- `POST /api/chat` — gateway chat ke upstream OpenAI-compatible yang kamu kelola.
+- `POST /api/chat` — gateway chat server-side ke OpenRouter; model harus berasal dari katalog OpenRouter.
 
 Contoh request chat:
 
 ```json
 {
-  "model": "nama-model-di-upstream",
+  "model": "openrouter:provider/model",
   "messages": [
     { "role": "user", "content": "Halo!" }
   ],
@@ -78,3 +78,12 @@ Sumber publik dapat mengubah format, membatasi rate, atau gagal sementara. Setia
 - Jangan menaruh file model besar di deployment Vercel. Gunakan runtime inference terpisah.
 - Periksa Terms of Service, robots.txt, lisensi, dan rate limit sebelum menambahkan kolektor situs lain.
 - Endpoint ini belum menyediakan autentikasi akun pengguna, billing, kuota chat, atau proteksi abuse. Tambahkan sebelum membuka chat publik.
+
+
+## 7. Chat OpenRouter
+Set `OPENROUTER_API_KEY` di Vercel → Settings → Environment Variables, lalu redeploy.
+Frontend mengirim `POST /api/chat` dengan `model` berupa ID katalog (`openrouter:provider/model`)
+atau ID OpenRouter (`provider/model`) dan `messages`. API key tidak boleh dikirim dari browser/APK.
+Endpoint memeriksa bahwa model ada di katalog OpenRouter sebelum meneruskan request.
+Sebelum membuka layanan untuk publik, tambahkan autentikasi pengguna, rate limit, dan kuota
+agar kredensial serta saldo OpenRouter tidak disalahgunakan.
