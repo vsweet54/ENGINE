@@ -1,5 +1,4 @@
 # NEO AI
-
 Backend starter untuk mengumpulkan **metadata publik** model AI dari OpenRouter, Hugging Face, dan GitHub. Dirancang untuk Vercel Functions + Neon PostgreSQL.
 
 > Penting: katalog metadata bukan izin inference. Project ini tidak membypass autentikasi provider. Tanpa `OPENROUTER_API_KEY`, katalog tetap bisa digunakan, tetapi `/api/chat` mengembalikan HTTP 503.
