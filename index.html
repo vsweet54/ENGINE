@@ -6,88 +6,29 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
   <meta name="theme-color" content="#07090e" />
   <title>NEO AI — Multi Model Chat</title>
-
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/lucide@latest"></script>
-
   <style>
-    html, body {
-      height: 100%;
-      height: 100dvh;
-      overflow: hidden;
-      background-color: #07090e;
-      -webkit-tap-highlight-color: transparent;
-    }
-
-    * {
-      box-sizing: border-box;
-    }
-
-    .no-scrollbar::-webkit-scrollbar {
-      display: none;
-    }
-
-    .no-scrollbar {
-      scrollbar-width: none;
-      -ms-overflow-style: none;
-    }
-
-    @keyframes pulseGlow {
-      0%, 100% { opacity: .15; }
-      50% { opacity: .25; }
-    }
-
-    .glow-bg {
-      animation: pulseGlow 4s ease-in-out infinite;
-    }
-
-    .model-select {
-      color-scheme: dark;
-    }
-
-    .model-select option {
-      background: #111827;
-      color: #e2e8f0;
-    }
-
-    button:disabled {
-      cursor: not-allowed;
-      opacity: .45;
-    }
-
-    .message-bubble {
-      animation: appear .2s ease-out;
-    }
-
-    @keyframes appear {
-      from {
-        opacity: 0;
-        transform: translateY(6px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    #chat-stream {
-      overscroll-behavior: contain;
-    }
-
-    .drawer-open {
-      transform: translateX(0) !important;
-    }
+    html,body{height:100%;height:100dvh;overflow:hidden;background:#07090e;-webkit-tap-highlight-color:transparent}
+    *{box-sizing:border-box}
+    .no-scrollbar::-webkit-scrollbar{display:none}
+    .no-scrollbar{scrollbar-width:none;-ms-overflow-style:none}
+    @keyframes pulseGlow{0%,100%{opacity:.15}50%{opacity:.25}}
+    .glow-bg{animation:pulseGlow 4s ease-in-out infinite}
+    .model-select{color-scheme:dark}
+    .model-select option{background:#111827;color:#e2e8f0}
+    button:disabled{cursor:not-allowed;opacity:.45}
+    .message-bubble{animation:appear .2s ease-out}
+    @keyframes appear{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+    #chat-stream{overscroll-behavior:contain}
+    .drawer-open{transform:translateX(0)!important}
   </style>
 </head>
-
 <body class="bg-[#07090e] text-slate-100 font-sans selection:bg-cyan-500 selection:text-black select-none flex flex-col">
 
-  <!-- BACKGROUND -->
   <div class="fixed inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-cyan-900/20 via-[#07090e]/90 to-[#07090e] pointer-events-none glow-bg"></div>
 
-  <!-- HEADER -->
   <header class="relative z-20 flex items-center justify-between px-4 py-3 bg-[#0d1117]/85 backdrop-blur-md border-b border-cyan-950/60 shadow-lg shadow-black/40 shrink-0">
-
     <div class="flex items-center gap-2.5">
       <div class="relative">
         <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-cyan-400 to-blue-600 flex items-center justify-center shadow-lg shadow-cyan-500/20">
@@ -95,17 +36,11 @@
         </div>
         <span class="absolute -top-1 -right-1 w-2.5 h-2.5 bg-emerald-400 rounded-full ring-2 ring-[#07090e]"></span>
       </div>
-
       <div>
         <div class="flex items-center gap-1.5">
-          <span class="font-black text-sm tracking-widest text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-sky-300 to-fuchsia-400">
-            NEO//AI
-          </span>
-          <span class="text-[9px] font-mono px-1.5 py-0.5 bg-cyan-950/80 text-cyan-400 border border-cyan-800/40 rounded">
-            v5.0
-          </span>
+          <span class="font-black text-sm tracking-widest text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-sky-300 to-fuchsia-400">NEO//AI</span>
+          <span class="text-[9px] font-mono px-1.5 py-0.5 bg-cyan-950/80 text-cyan-400 border border-cyan-800/40 rounded">v5.1</span>
         </div>
-
         <div class="text-[10px] font-mono text-slate-400 flex items-center gap-1.5">
           <span class="inline-block w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
           <span id="connection-status">SYSTEM ONLINE</span>
@@ -114,694 +49,473 @@
         </div>
       </div>
     </div>
-
     <button id="open-drawer" class="p-2 rounded-xl bg-slate-900/80 border border-slate-800 text-slate-300 active:scale-90 transition">
       <i data-lucide="menu" class="w-5 h-5 text-cyan-400"></i>
     </button>
   </header>
 
-  <!-- MODE SELECTOR -->
   <div class="relative z-10 flex gap-2 px-3 py-2 overflow-x-auto no-scrollbar bg-[#090d14]/70 border-b border-slate-900 shrink-0">
-
-    <button class="mode-btn flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-mono whitespace-nowrap border bg-cyan-500/10 border-cyan-400 text-cyan-300 shadow-sm shadow-cyan-500/20 active:scale-95 transition" data-mode="Matrix Code">
-      <i data-lucide="terminal" class="w-3.5 h-3.5"></i>
-      Matrix Code
+    <button class="mode-btn flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-mono whitespace-nowrap border bg-cyan-500/10 border-cyan-400 text-cyan-300" data-mode="Matrix Code">
+      <i data-lucide="terminal" class="w-3.5 h-3.5"></i>Matrix Code
     </button>
-
-    <button class="mode-btn flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-mono whitespace-nowrap border bg-slate-900/50 border-slate-800/80 text-slate-400 active:scale-95 transition" data-mode="Deep Neural">
-      <i data-lucide="cpu" class="w-3.5 h-3.5"></i>
-      Deep Neural
+    <button class="mode-btn flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-mono whitespace-nowrap border bg-slate-900/50 border-slate-800/80 text-slate-400" data-mode="Deep Neural">
+      <i data-lucide="cpu" class="w-3.5 h-3.5"></i>Deep Neural
     </button>
-
-    <button class="mode-btn flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-mono whitespace-nowrap border bg-slate-900/50 border-slate-800/80 text-slate-400 active:scale-95 transition" data-mode="Fast Kernel">
-      <i data-lucide="zap" class="w-3.5 h-3.5"></i>
-      Fast Kernel
+    <button class="mode-btn flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-mono whitespace-nowrap border bg-slate-900/50 border-slate-800/80 text-slate-400" data-mode="Fast Kernel">
+      <i data-lucide="zap" class="w-3.5 h-3.5"></i>Fast Kernel
     </button>
-
   </div>
 
-  <!-- MODEL SELECTOR -->
   <section class="relative z-10 px-3 py-2 bg-[#090d14]/90 border-b border-slate-900 shrink-0">
-
     <div class="flex items-center gap-2 mb-1.5">
       <i data-lucide="brain-circuit" class="w-4 h-4 text-cyan-400"></i>
-      <span class="text-[10px] font-mono text-slate-400 tracking-wider">
-        SELECT AI MODEL
-      </span>
-      <span id="model-status" class="ml-auto text-[9px] font-mono text-slate-500">
-        Memuat katalog...
-      </span>
+      <span class="text-[10px] font-mono text-slate-400 tracking-wider">SELECT AI MODEL</span>
+      <span id="model-status" class="ml-auto text-[9px] font-mono text-slate-500">Memuat katalog...</span>
     </div>
-
     <div class="flex items-center gap-2">
       <div class="relative flex-1 min-w-0">
-        <select
-          id="model-select"
-          class="model-select w-full appearance-none bg-[#111827] border border-cyan-900/60 rounded-xl pl-3 pr-9 py-2.5 text-xs font-mono text-cyan-300 outline-none focus:border-cyan-400"
-        >
+        <select id="model-select" class="model-select w-full appearance-none bg-[#111827] border border-cyan-900/60 rounded-xl pl-3 pr-9 py-2.5 text-xs font-mono text-cyan-300 outline-none focus:border-cyan-400">
           <option value="openrouter/free">Auto Free · OpenRouter</option>
         </select>
-
         <i data-lucide="chevron-down" class="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-cyan-500 pointer-events-none"></i>
       </div>
-
-      <button
-        id="refresh-models"
-        class="p-2.5 rounded-xl bg-slate-900 border border-slate-800 text-cyan-400 active:scale-90 transition"
-        title="Refresh model"
-      >
+      <button id="refresh-models" class="p-2.5 rounded-xl bg-slate-900 border border-slate-800 text-cyan-400 active:scale-90 transition">
         <i data-lucide="refresh-cw" class="w-4 h-4"></i>
       </button>
     </div>
-
     <div class="flex items-center justify-between mt-1.5 px-1">
-      <span id="selected-model-label" class="text-[9px] text-slate-500 font-mono truncate">
-        Model: Auto Free
-      </span>
-      <span class="text-[9px] text-slate-600 font-mono">
-        OPENROUTER
-      </span>
+      <span id="selected-model-label" class="text-[9px] text-slate-500 font-mono truncate">Model: Auto Free</span>
+      <span class="text-[9px] text-slate-600 font-mono">OPENROUTER</span>
     </div>
   </section>
 
-  <!-- CHAT STREAM -->
   <main id="chat-stream" class="relative z-10 flex-1 min-h-0 overflow-y-auto px-3.5 py-4 space-y-4">
-
-    <!-- WELCOME MESSAGE -->
     <div class="flex flex-col items-start message-bubble">
-      <span class="text-[10px] font-mono text-slate-500 px-1 mb-1">
-        NEO CORE · SYSTEM
-      </span>
-
-      <div class="max-w-[90%] rounded-2xl rounded-tl-none p-3.5 text-sm leading-relaxed bg-[#0e1320]/90 backdrop-blur-md border border-slate-800 text-slate-200 shadow-lg">
-
+      <span class="text-[10px] font-mono text-slate-500 px-1 mb-1">NEO CORE · SYSTEM</span>
+      <div class="max-w-[90%] rounded-2xl rounded-tl-none p-3.5 text-sm leading-relaxed bg-[#0e1320]/90 border border-slate-800 text-slate-200 shadow-lg">
         <div class="mb-2 pb-2 border-b border-slate-800/80">
           <div class="flex items-center gap-1.5 text-[11px] font-mono text-cyan-400">
-            <i data-lucide="sparkles" class="w-3 h-3"></i>
-            Neural System
+            <i data-lucide="sparkles" class="w-3 h-3"></i>Neural System
           </div>
-
-          <div class="mt-2 text-[11px] text-slate-400 font-mono bg-black/50 p-2.5 rounded-lg border border-slate-800 leading-relaxed">
-            Multi-model gateway initialized. Model catalog connection ready. Awaiting operator input.
+          <div class="mt-2 text-[11px] text-slate-400 font-mono bg-black/50 p-2.5 rounded-lg border border-slate-800">
+            Multi-model gateway initialized. Awaiting operator input.
           </div>
         </div>
-
-        <p class="font-medium">
-          Sistem NEO AI aktif.
-        </p>
-
-        <p class="text-slate-400 mt-1">
-          Pilih model AI di atas, lalu mulai percakapan. Kamu juga bisa menggunakan Auto Free untuk memilih model gratis melalui OpenRouter.
-        </p>
-
-        <div class="mt-3 rounded-xl overflow-hidden border border-cyan-950/80 bg-[#05070a]">
-          <div class="flex items-center px-3 py-1.5 bg-slate-900/70 border-b border-slate-800 text-[10px] font-mono text-slate-400">
-            SYSTEM STATUS
-          </div>
-          <pre class="p-2.5 text-[11px] font-mono text-cyan-300 overflow-x-auto">NEO_CORE: ONLINE
-MODEL_GATEWAY: READY
-CATALOG: CONNECTING</pre>
-        </div>
+        <p class="font-medium">Sistem NEO AI aktif.</p>
+        <p class="text-slate-400 mt-1">Pilih model AI di atas, lalu mulai percakapan. Gunakan Auto Free untuk memilih model gratis secara otomatis.</p>
       </div>
     </div>
-
   </main>
 
-  <!-- INPUT DOCK -->
   <footer class="relative z-20 px-3 pb-3 pt-2 bg-gradient-to-t from-[#07090e] via-[#07090e]/95 to-transparent shrink-0">
-
     <div class="flex items-center gap-1.5 bg-[#0f1422]/95 border border-cyan-950/80 rounded-2xl p-1.5 shadow-2xl backdrop-blur-xl">
-
-      <button id="mic-btn" class="p-2.5 rounded-xl bg-slate-900 border border-slate-800 text-slate-400 active:scale-95 transition">
+      <button id="mic-btn" class="p-2.5 rounded-xl bg-slate-900 border border-slate-800 text-slate-400">
         <i data-lucide="mic" class="w-4 h-4"></i>
       </button>
-
-      <input
-        id="prompt-input"
-        type="text"
-        inputmode="text"
-        autocomplete="off"
-        placeholder="Ketik instruksi..."
-        class="flex-1 min-w-0 bg-transparent px-2.5 py-2 text-sm text-slate-100 placeholder:text-slate-500 focus:outline-none"
-      />
-
-      <button id="send-btn" class="p-2.5 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 text-black font-bold active:scale-95 transition shadow-lg shadow-cyan-500/20 disabled:opacity-40">
+      <input id="prompt-input" type="text" inputmode="text" autocomplete="off" placeholder="Ketik instruksi..." class="flex-1 min-w-0 bg-transparent px-2.5 py-2 text-sm text-slate-100 placeholder:text-slate-500 focus:outline-none" />
+      <button id="send-btn" class="p-2.5 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 text-black font-bold active:scale-95 transition shadow-lg shadow-cyan-500/20">
         <i data-lucide="send" class="w-4 h-4"></i>
       </button>
-
     </div>
-
-    <div class="text-center text-[9px] font-mono text-slate-600 mt-2">
-      NEO AI · POWERED BY OPENROUTER
-    </div>
+    <div class="text-center text-[9px] font-mono text-slate-600 mt-2">NEO AI · POWERED BY OPENROUTER</div>
   </footer>
 
-  <!-- TELEMETRY DRAWER -->
   <div id="drawer-backdrop" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden">
-
     <div id="drawer-panel" class="absolute right-0 top-0 bottom-0 w-[78%] max-w-xs bg-[#0b0f19] border-l border-cyan-950/80 p-4 flex flex-col justify-between translate-x-full transition-transform duration-300">
-
       <div>
         <div class="flex items-center justify-between pb-3 border-b border-slate-800">
-          <span class="font-mono text-xs text-cyan-400 font-bold tracking-wider flex items-center gap-1.5">
-            <i data-lucide="sliders" class="w-3.5 h-3.5"></i>
-            TELEMETRY
-          </span>
-
-          <button id="close-drawer" class="p-1 text-slate-400 active:scale-90">
-            <i data-lucide="x" class="w-5 h-5"></i>
-          </button>
+          <span class="font-mono text-xs text-cyan-400 font-bold tracking-wider">TELEMETRY</span>
+          <button id="close-drawer" class="p-1 text-slate-400"><i data-lucide="x" class="w-5 h-5"></i></button>
         </div>
-
         <div class="mt-4 space-y-3 font-mono text-xs">
-
           <div class="p-3 rounded-xl bg-slate-900/60 border border-slate-800/80">
             <div class="text-slate-500 text-[10px]">CONNECTION</div>
-            <div id="drawer-connection" class="text-emerald-400 font-bold text-base mt-0.5">
-              ONLINE
-            </div>
+            <div id="drawer-connection" class="text-emerald-400 font-bold text-base mt-0.5">ONLINE</div>
           </div>
-
           <div class="p-3 rounded-xl bg-slate-900/60 border border-slate-800/80">
             <div class="text-slate-500 text-[10px]">MODEL CATALOG</div>
-            <div id="drawer-model-count" class="text-cyan-400 font-bold text-base mt-0.5">
-              Loading...
-            </div>
-            <div class="text-[10px] text-slate-500 mt-1">
-              OpenRouter models
-            </div>
+            <div id="drawer-model-count" class="text-cyan-400 font-bold text-base mt-0.5">Loading...</div>
           </div>
-
           <div class="p-3 rounded-xl bg-slate-900/60 border border-slate-800/80">
             <div class="text-slate-500 text-[10px]">ACTIVE MODEL</div>
-            <div id="drawer-active-model" class="text-fuchsia-400 font-bold mt-1 break-words">
-              Auto Free
-            </div>
+            <div id="drawer-active-model" class="text-fuchsia-400 font-bold mt-1 break-words">Auto Free</div>
           </div>
-
           <div class="p-3 rounded-xl bg-slate-900/60 border border-slate-800/80">
             <div class="text-slate-500 text-[10px]">CURRENT MODE</div>
-            <div id="drawer-active-mode" class="text-amber-400 font-bold mt-0.5">
-              Matrix Code
-            </div>
+            <div id="drawer-active-mode" class="text-amber-400 font-bold mt-0.5">Matrix Code</div>
           </div>
-
         </div>
       </div>
-
       <div class="space-y-2">
-        <button id="clear-chat" class="w-full py-2.5 rounded-xl border border-rose-900/40 bg-rose-950/20 text-rose-400 text-xs font-mono flex items-center justify-center gap-2 active:scale-95 transition">
-          <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i>
-          Reset Buffer Chat
-        </button>
-
-        <button id="drawer-refresh" class="w-full py-2.5 rounded-xl border border-cyan-900/40 bg-cyan-950/20 text-cyan-400 text-xs font-mono flex items-center justify-center gap-2 active:scale-95 transition">
-          <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i>
-          Refresh Model Catalog
-        </button>
+        <button id="clear-chat" class="w-full py-2.5 rounded-xl border border-rose-900/40 bg-rose-950/20 text-rose-400 text-xs font-mono">Reset Buffer Chat</button>
+        <button id="drawer-refresh" class="w-full py-2.5 rounded-xl border border-cyan-900/40 bg-cyan-950/20 text-cyan-400 text-xs font-mono">Refresh Model Catalog</button>
       </div>
-
     </div>
   </div>
 
-  <!-- JAVASCRIPT -->
-  <script>
-    lucide.createIcons();
-
-    const API = "https://neoengine.vercel.app";
-
-    const chatStream = document.getElementById("chat-stream");
-    const promptInput = document.getElementById("prompt-input");
-    const sendBtn = document.getElementById("send-btn");
-    const micBtn = document.getElementById("mic-btn");
-
-    const modelSelect = document.getElementById("model-select");
-    const modelStatus = document.getElementById("model-status");
-    const selectedModelLabel = document.getElementById("selected-model-label");
-
-    const connectionStatus = document.getElementById("connection-status");
-    const drawerConnection = document.getElementById("drawer-connection");
-    const drawerModelCount = document.getElementById("drawer-model-count");
-    const drawerActiveModel = document.getElementById("drawer-active-model");
-    const drawerActiveMode = document.getElementById("drawer-active-mode");
-
-    const drawerBackdrop = document.getElementById("drawer-backdrop");
-    const drawerPanel = document.getElementById("drawer-panel");
-
-    let currentMode = "Matrix Code";
-    let selectedModel = "openrouter/free";
-    let history = [];
-    let isSending = false;
-    let isListening = false;
-    let modelCatalog = [];
-
-    // =====================================
-    // MODEL CATALOG
-    // =====================================
-
-    function updateSelectedModel() {
-      const option = modelSelect.selectedOptions[0];
-
-      selectedModel = modelSelect.value || "openrouter/free";
-
-      const label = option
-        ? option.textContent
-        : "Auto Free · OpenRouter";
-
-      selectedModelLabel.textContent = "Model: " + label;
-      drawerActiveModel.textContent = label;
-    }
-
-    async function loadModels() {
-      const refreshButton = document.getElementById("refresh-models");
-
-      modelStatus.textContent = "Memuat...";
-      connectionStatus.textContent = "LOADING CATALOG";
-
-      refreshButton.disabled = true;
-
-      try {
-        const allModels = [];
-        let offset = 0;
-
-        while (true) {
-          const url =
-            `${API}/api/models?source=openrouter&limit=100&offset=${offset}`;
-
-          const response = await fetch(url);
-
-          if (!response.ok) {
-            throw new Error("HTTP " + response.status);
-          }
-
-          const result = await response.json();
-
-          if (!Array.isArray(result.data)) {
-            throw new Error("Format katalog tidak valid");
-          }
-
-          allModels.push(...result.data);
-
-          if (result.data.length < 100) {
-            break;
-          }
-
-          offset += 100;
-        }
-
-        modelCatalog = allModels;
-
-        const fragment = document.createDocumentFragment();
-
-        const autoOption = document.createElement("option");
-        autoOption.value = "openrouter/free";
-        autoOption.textContent = "Auto Free · OpenRouter";
-
-        fragment.appendChild(autoOption);
-
-        const providers = {};
-
-        modelCatalog.forEach(model => {
-          if (!model.source_id) return;
-
-          const provider = model.provider || "Other";
-
-          if (!providers[provider]) {
-            providers[provider] = [];
-          }
-
-          providers[provider].push(model);
-        });
-
-        Object.keys(providers)
-          .sort((a, b) => a.localeCompare(b))
-          .forEach(provider => {
-            const group = document.createElement("optgroup");
-            group.label = provider;
-
-            providers[provider].forEach(model => {
-              const option = document.createElement("option");
-
-              option.value = model.source_id;
-              option.textContent =
-                model.name || model.source_id;
-
-              group.appendChild(option);
-            });
-
-            fragment.appendChild(group);
-          });
-
-        modelSelect.replaceChildren(fragment);
-
-        const stillExists = Array.from(modelSelect.options)
-          .some(option => option.value === selectedModel);
-
-        if (!stillExists) {
-          selectedModel = "openrouter/free";
-        }
-
-        modelSelect.value = selectedModel;
-
-        updateSelectedModel();
-
-        modelStatus.textContent =
-          modelCatalog.length + " model tersedia";
-
-        drawerModelCount.textContent =
-          modelCatalog.length + " models";
-
-        connectionStatus.textContent = "SYSTEM ONLINE";
-        drawerConnection.textContent = "ONLINE";
-
-      } catch (error) {
-        console.error("Catalog error:", error);
-
-        modelStatus.textContent = "Katalog gagal dimuat";
-        drawerModelCount.textContent = "Unavailable";
-
-        connectionStatus.textContent = "CATALOG ERROR";
-        drawerConnection.textContent = "CATALOG ERROR";
-
-      } finally {
-        refreshButton.disabled = false;
-      }
-    }
-
-    modelSelect.addEventListener("change", () => {
-      updateSelectedModel();
-    });
-
-    document.getElementById("refresh-models")
-      .addEventListener("click", loadModels);
-
-    document.getElementById("drawer-refresh")
-      .addEventListener("click", loadModels);
-
-    // =====================================
-    // DRAWER
-    // =====================================
-
-    function openDrawer() {
-      drawerBackdrop.classList.remove("hidden");
-
-      requestAnimationFrame(() => {
-        drawerPanel.classList.add("drawer-open");
-      });
-    }
-
-    function closeDrawer() {
-      drawerPanel.classList.remove("drawer-open");
-
-      setTimeout(() => {
-        drawerBackdrop.classList.add("hidden");
-      }, 300);
-    }
-
-    document.getElementById("open-drawer")
-      .addEventListener("click", openDrawer);
-
-    document.getElementById("close-drawer")
-      .addEventListener("click", closeDrawer);
-
-    drawerBackdrop.addEventListener("click", event => {
-      if (event.target === drawerBackdrop) {
-        closeDrawer();
-      }
-    });
-
-    // =====================================
-    // MODE SELECTOR
-    // =====================================
-
-    document.querySelectorAll(".mode-btn").forEach(button => {
-      button.addEventListener("click", () => {
-        document.querySelectorAll(".mode-btn").forEach(btn => {
-          btn.classList.remove(
-            "bg-cyan-500/10",
-            "border-cyan-400",
-            "text-cyan-300"
-          );
-
-          btn.classList.add(
-            "bg-slate-900/50",
-            "border-slate-800/80",
-            "text-slate-400"
-          );
-        });
-
-        button.classList.add(
-          "bg-cyan-500/10",
-          "border-cyan-400",
-          "text-cyan-300"
-        );
-
-        button.classList.remove(
-          "bg-slate-900/50",
-          "border-slate-800/80",
-          "text-slate-400"
-        );
-
-        currentMode = button.dataset.mode;
-
-        drawerActiveMode.textContent = currentMode;
-      });
-    });
-
-    // =====================================
-    // CHAT MESSAGE
-    // =====================================
-
-    function addMessage(role, content) {
-      const wrapper = document.createElement("div");
-
-      wrapper.className = role === "user"
-        ? "flex flex-col items-end message-bubble"
-        : "flex flex-col items-start message-bubble";
-
-      const time = new Date().toLocaleTimeString([], {
-        hour: "2-digit",
-        minute: "2-digit"
-      });
-
-      const label = document.createElement("span");
-
-      label.className =
-        "text-[10px] font-mono text-slate-500 px-1 mb-1";
-
-      label.textContent =
-        (role === "user" ? "OPERATOR" : "NEO CORE") +
-        " · " + time;
-
-      const bubble = document.createElement("div");
-
-      bubble.className = role === "user"
-        ? "max-w-[88%] rounded-2xl rounded-tr-none p-3.5 text-sm leading-relaxed bg-gradient-to-r from-cyan-600 to-blue-600 text-white shadow-md shadow-cyan-900/30 break-words"
-        : "max-w-[90%] rounded-2xl rounded-tl-none p-3.5 text-sm leading-relaxed bg-[#0e1320]/90 border border-slate-800 text-slate-200 shadow-lg break-words whitespace-pre-wrap";
-
-      bubble.textContent = content;
-
-      wrapper.append(label, bubble);
-
-      chatStream.appendChild(wrapper);
-
-      scrollToBottom();
-
-      return bubble;
-    }
-
-    // =====================================
-    // SEND CHAT
-    // =====================================
-
-    async function sendMessage() {
-      const text = promptInput.value.trim();
-
-      if (!text || isSending) return;
-
-      promptInput.value = "";
-
-      addMessage("user", text);
-
-      history.push({
-        role: "user",
-        content: text
-      });
-
-      isSending = true;
-      sendBtn.disabled = true;
-      promptInput.disabled = true;
-      modelSelect.disabled = true;
-
-      const loading = addMessage(
-        "assistant",
-        "NEO sedang memproses..."
+<script>
+(() => {
+  "use strict";
+
+  if (window.lucide) lucide.createIcons();
+
+  // Gunakan domain tempat frontend sedang dibuka.
+  const API = window.location.origin;
+
+  const $ = id => document.getElementById(id);
+  const chatStream = $("chat-stream");
+  const promptInput = $("prompt-input");
+  const sendBtn = $("send-btn");
+  const modelSelect = $("model-select");
+
+  let currentMode = "Matrix Code";
+  let selectedModel = "openrouter/free";
+  let history = [];
+  let isSending = false;
+  let isListening = false;
+  let modelCatalog = [];
+
+  function scrollToBottom() {
+    chatStream.scrollTop = chatStream.scrollHeight;
+  }
+
+  function setConnection(message, drawerMessage) {
+    $("connection-status").textContent = message;
+    $("drawer-connection").textContent = drawerMessage || message;
+  }
+
+  function updateSelectedModel() {
+    selectedModel = modelSelect.value || "openrouter/free";
+    const option = modelSelect.selectedOptions[0];
+    const label = option ? option.textContent : "Auto Free · OpenRouter";
+
+    $("selected-model-label").textContent = "Model: " + label;
+    $("drawer-active-model").textContent = label;
+  }
+
+  async function loadModels() {
+    const refresh = $("refresh-models");
+    $("model-status").textContent = "Memuat...";
+    refresh.disabled = true;
+
+    try {
+      const response = await fetch(
+        API + "/api/models?source=openrouter&limit=100&offset=0",
+        { method: "GET", cache: "no-store" }
       );
 
-      try {
-        const response = await fetch(API + "/api/chat", {
-          method: "POST",
-
-          headers: {
-            "Content-Type": "application/json"
-          },
-
-          body: JSON.stringify({
-            model: selectedModel,
-            messages: history,
-            stream: false
-          })
-        });
-
-        const data = await response.json();
-
-        if (!response.ok) {
-          throw new Error(
-            data.error ||
-            data.message ||
-            "HTTP " + response.status
-          );
-        }
-
-        const answer =
-          data.choices?.[0]?.message?.content ||
-          data.message?.content ||
-          data.content;
-
-        if (!answer) {
-          throw new Error(
-            "Respons AI kosong atau format tidak dikenal."
-          );
-        }
-
-        loading.textContent = answer;
-
-        history.push({
-          role: "assistant",
-          content: answer
-        });
-
-        connectionStatus.textContent = "SYSTEM ONLINE";
-
-      } catch (error) {
-        console.error("Chat error:", error);
-
-        loading.textContent =
-          "Koneksi NEO AI gagal: " + error.message;
-
-        history.pop();
-
-        connectionStatus.textContent = "CHAT ERROR";
-
-      } finally {
-        isSending = false;
-
-        sendBtn.disabled = false;
-        promptInput.disabled = false;
-        modelSelect.disabled = false;
-
-        promptInput.focus();
-
-        scrollToBottom();
+      if (!response.ok) {
+        throw new Error("Katalog HTTP " + response.status);
       }
+
+      const result = await response.json();
+      if (!Array.isArray(result.data)) {
+        throw new Error("Format katalog tidak valid");
+      }
+
+      modelCatalog = result.data;
+
+      const fragment = document.createDocumentFragment();
+      const auto = document.createElement("option");
+      auto.value = "openrouter/free";
+      auto.textContent = "Auto Free · OpenRouter";
+      fragment.appendChild(auto);
+
+      const providers = {};
+
+      modelCatalog.forEach(model => {
+        if (!model.source_id) return;
+        const provider = model.provider || "Other";
+        if (!providers[provider]) providers[provider] = [];
+        providers[provider].push(model);
+      });
+
+      Object.keys(providers).sort().forEach(provider => {
+        const group = document.createElement("optgroup");
+        group.label = provider;
+
+        providers[provider].forEach(model => {
+          const option = document.createElement("option");
+          option.value = model.source_id;
+
+          const isFree = model.source_id.endsWith(":free");
+          option.textContent =
+            (isFree ? "🟢 GRATIS · " : "") +
+            (model.name || model.source_id);
+
+          group.appendChild(option);
+        });
+
+        fragment.appendChild(group);
+      });
+
+      modelSelect.replaceChildren(fragment);
+
+      if (!Array.from(modelSelect.options).some(o => o.value === selectedModel)) {
+        selectedModel = "openrouter/free";
+      }
+
+      modelSelect.value = selectedModel;
+      updateSelectedModel();
+
+      $("model-status").textContent = modelCatalog.length + " model tersedia";
+      $("drawer-model-count").textContent = modelCatalog.length + " models";
+      setConnection("SYSTEM ONLINE", "ONLINE");
+
+    } catch (error) {
+      console.error("Catalog error:", error);
+      $("model-status").textContent = "Katalog gagal: " + error.message;
+      $("drawer-model-count").textContent = "Unavailable";
+      setConnection("CATALOG ERROR", "CATALOG ERROR");
+    } finally {
+      refresh.disabled = false;
+    }
+  }
+
+  modelSelect.addEventListener("change", updateSelectedModel);
+  $("refresh-models").addEventListener("click", loadModels);
+  $("drawer-refresh").addEventListener("click", loadModels);
+
+  function addMessage(role, content) {
+    const wrapper = document.createElement("div");
+    wrapper.className = role === "user"
+      ? "flex flex-col items-end message-bubble"
+      : "flex flex-col items-start message-bubble";
+
+    const label = document.createElement("span");
+    label.className = "text-[10px] font-mono text-slate-500 px-1 mb-1";
+    label.textContent =
+      (role === "user" ? "OPERATOR" : "NEO CORE") +
+      " · " + new Date().toLocaleTimeString([], {
+        hour: "2-digit", minute: "2-digit"
+      });
+
+    const bubble = document.createElement("div");
+    bubble.className = role === "user"
+      ? "max-w-[88%] rounded-2xl rounded-tr-none p-3.5 text-sm leading-relaxed bg-gradient-to-r from-cyan-600 to-blue-600 text-white shadow-md break-words whitespace-pre-wrap"
+      : "max-w-[90%] rounded-2xl rounded-tl-none p-3.5 text-sm leading-relaxed bg-[#0e1320]/90 border border-slate-800 text-slate-200 shadow-lg break-words whitespace-pre-wrap";
+
+    bubble.textContent = content;
+    wrapper.append(label, bubble);
+    chatStream.appendChild(wrapper);
+    scrollToBottom();
+    return bubble;
+  }
+
+  function extractAnswer(data) {
+    const content = data?.choices?.[0]?.message?.content
+      ?? data?.message?.content
+      ?? data?.content
+      ?? data?.reply;
+
+    if (typeof content === "string") return content.trim();
+
+    if (Array.isArray(content)) {
+      return content.map(item => {
+        if (typeof item === "string") return item;
+        return item?.text || "";
+      }).join("\n").trim();
     }
 
-    sendBtn.addEventListener("click", sendMessage);
+    return "";
+  }
 
-    promptInput.addEventListener("keydown", event => {
-      if (event.key === "Enter") {
-        event.preventDefault();
-        sendMessage();
-      }
-    });
+  function extractError(data, status) {
+    const error = data?.error;
+    if (typeof error === "string") return error;
+    if (error?.message) return error.message;
+    if (data?.details) return String(data.details);
+    if (data?.message) return String(data.message);
+    return "HTTP " + status + " — server tidak memberikan detail error";
+  }
 
-    // =====================================
-    // VOICE INPUT
-    // =====================================
+  async function sendMessage() {
+    const message = promptInput.value.trim();
+    if (!message || isSending) return;
 
-    micBtn.addEventListener("click", () => {
-      const SpeechRecognition =
-        window.SpeechRecognition ||
-        window.webkitSpeechRecognition;
+    const modelToSend = selectedModel || "openrouter/free";
 
-      if (!SpeechRecognition) {
-        alert("Browser ini belum mendukung pengenalan suara.");
-        return;
-      }
+    promptInput.value = "";
+    addMessage("user", message);
 
-      if (isListening) return;
+    history.push({ role: "user", content: message });
 
-      const recognition = new SpeechRecognition();
+    isSending = true;
+    sendBtn.disabled = true;
+    promptInput.disabled = true;
+    modelSelect.disabled = true;
 
-      recognition.lang = "id-ID";
-      recognition.interimResults = false;
-      recognition.maxAlternatives = 1;
+    const loading = addMessage("assistant", "NEO sedang memproses...");
 
-      recognition.onstart = () => {
-        isListening = true;
+    try {
+      const response = await fetch(API + "/api/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          model: modelToSend,
+          messages: history,
+          stream: false
+        })
+      });
 
-        micBtn.classList.add(
-          "bg-rose-500",
-          "text-white",
-          "animate-pulse"
+      const raw = await response.text();
+      let data;
+
+      try {
+        data = JSON.parse(raw);
+      } catch {
+        throw new Error(
+          "Server mengirim respons bukan JSON. HTTP " +
+          response.status + ". " + raw.slice(0, 250)
         );
-      };
+      }
 
-      recognition.onresult = event => {
-        promptInput.value =
-          event.results[0][0].transcript;
+      if (!response.ok) {
+        throw new Error(extractError(data, response.status));
+      }
 
-        promptInput.focus();
-      };
+      const answer = extractAnswer(data);
 
-      recognition.onerror = event => {
-        console.error("Voice error:", event.error);
-      };
-
-      recognition.onend = () => {
-        isListening = false;
-
-        micBtn.classList.remove(
-          "bg-rose-500",
-          "text-white",
-          "animate-pulse"
+      if (!answer) {
+        throw new Error(
+          "Respons HTTP 200 diterima, tetapi isi jawaban kosong. " +
+          JSON.stringify(data).slice(0, 300)
         );
-      };
+      }
 
-      recognition.start();
-    });
+      loading.textContent = answer;
 
-    // =====================================
-    // RESET CHAT
-    // =====================================
+      history.push({
+        role: "assistant",
+        content: answer
+      });
 
-    document.getElementById("clear-chat")
-      .addEventListener("click", () => {
-        history = [];
-        chatStream.innerHTML = "";
+      setConnection("SYSTEM ONLINE", "ONLINE");
 
-        closeDrawer();
+    } catch (error) {
+      console.error("NEO CHAT ERROR:", error);
 
-        addMessage(
-          "assistant",
-          "Buffer chat berhasil direset. Silakan mulai percakapan baru."
+      loading.textContent =
+        "NEO AI ERROR\n\n" + error.message +
+        "\n\nModel: " + modelToSend;
+
+      // Hapus pesan user yang gagal dari konteks percakapan.
+      if (history.length && history[history.length - 1].role === "user") {
+        history.pop();
+      }
+
+      setConnection("CHAT ERROR", "CHAT ERROR");
+
+    } finally {
+      isSending = false;
+      sendBtn.disabled = false;
+      promptInput.disabled = false;
+      modelSelect.disabled = false;
+      promptInput.focus();
+      scrollToBottom();
+    }
+  }
+
+  sendBtn.addEventListener("click", sendMessage);
+
+  promptInput.addEventListener("keydown", event => {
+    if (event.key === "Enter") {
+      event.preventDefault();
+      sendMessage();
+    }
+  });
+
+  // Mode selector
+  document.querySelectorAll(".mode-btn").forEach(button => {
+    button.addEventListener("click", () => {
+      document.querySelectorAll(".mode-btn").forEach(btn => {
+        btn.classList.remove(
+          "bg-cyan-500/10", "border-cyan-400", "text-cyan-300"
+        );
+        btn.classList.add(
+          "bg-slate-900/50", "border-slate-800/80", "text-slate-400"
         );
       });
 
-    // =====================================
-    // SCROLL
-    // =====================================
+      button.classList.add(
+        "bg-cyan-500/10", "border-cyan-400", "text-cyan-300"
+      );
+      button.classList.remove(
+        "bg-slate-900/50", "border-slate-800/80", "text-slate-400"
+      );
 
-    function scrollToBottom() {
-      chatStream.scrollTop = chatStream.scrollHeight;
+      currentMode = button.dataset.mode;
+      $("drawer-active-mode").textContent = currentMode;
+    });
+  });
+
+  // Drawer
+  const backdrop = $("drawer-backdrop");
+  const panel = $("drawer-panel");
+
+  function openDrawer() {
+    backdrop.classList.remove("hidden");
+    requestAnimationFrame(() => panel.classList.add("drawer-open"));
+  }
+
+  function closeDrawer() {
+    panel.classList.remove("drawer-open");
+    setTimeout(() => backdrop.classList.add("hidden"), 300);
+  }
+
+  $("open-drawer").addEventListener("click", openDrawer);
+  $("close-drawer").addEventListener("click", closeDrawer);
+  backdrop.addEventListener("click", event => {
+    if (event.target === backdrop) closeDrawer();
+  });
+
+  // Voice input
+  $("mic-btn").addEventListener("click", () => {
+    const SpeechRecognition =
+      window.SpeechRecognition || window.webkitSpeechRecognition;
+
+    if (!SpeechRecognition) {
+      alert("Browser ini belum mendukung pengenalan suara.");
+      return;
     }
 
-    // =====================================
-    // INITIALIZE
-    // =====================================
+    if (isListening) return;
 
-    loadModels();
-  </script>
+    const recognition = new SpeechRecognition();
+    recognition.lang = "id-ID";
+    recognition.interimResults = false;
+    recognition.maxAlternatives = 1;
 
+    recognition.onstart = () => {
+      isListening = true;
+      $("mic-btn").classList.add("bg-rose-500", "text-white", "animate-pulse");
+    };
+
+    recognition.onresult = event => {
+      promptInput.value = event.results[0][0].transcript;
+      promptInput.focus();
+    };
+
+    recognition.onerror = event => console.error("Voice error:", event.error);
+
+    recognition.onend = () => {
+      isListening = false;
+      $("mic-btn").classList.remove("bg-rose-500", "text-white", "animate-pulse");
+    };
+
+    recognition.start();
+  });
+
+  // Reset chat
+  $("clear-chat").addEventListener("click", () => {
+    history = [];
+    chatStream.innerHTML = "";
+    closeDrawer();
+    addMessage("assistant", "Buffer chat berhasil direset. Silakan mulai percakapan baru.");
+  });
+
+  loadModels();
+})();
+</script>
 </body>
 </html>
