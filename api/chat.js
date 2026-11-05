@@ -66,13 +66,18 @@ export default async function handler(req, res) {
       });
     }
 
-    const safeMessages = messages.map((m) => {
+    
+const safeMessages = messages.map((m) => {
   if (
     !m ||
     !["system", "user", "assistant"].includes(m.role) ||
     typeof m.content !== "string"
   ) {
     throw new Error("Invalid message format");
+  }
+
+  if (m.content.length > MAX_CONTENT_CHARS) {
+    throw new Error("Message is too long");
   }
 
   return {
@@ -86,15 +91,6 @@ safeMessages.unshift({
   content: "Kamu adalah NEO AI. Jawab menggunakan bahasa yang sama dengan pengguna. Jika pengguna menggunakan bahasa Indonesia, gunakan bahasa Indonesia yang natural, jelas, dan mudah dipahami."
 });
 
-      if (m.content.length > MAX_CONTENT_CHARS) {
-        throw new Error("Message is too long");
-      }
-
-      return {
-        role: m.role,
-        content: m.content
-      };
-    });
 
     const upstream = await fetch(OPENROUTER_URL, {
       method: "POST",
