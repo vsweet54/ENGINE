@@ -1,4 +1,4 @@
-# NEO AI — Vercel + Neon Model Catalog API
+# NEO AI
 
 Backend starter untuk mengumpulkan **metadata publik** model AI dari OpenRouter, Hugging Face, dan GitHub. Dirancang untuk Vercel Functions + Neon PostgreSQL.
 
